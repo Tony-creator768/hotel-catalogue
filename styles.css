@@ -5,7 +5,7 @@
   --soft: #F4F5F7;
   --card: #FFFFFF;
   --navy: #041E42;
-  --blue: #041E42;
+  --blue: #2F6FDB;
   --gray: #63666A;
   --silver: #EEF1F4;
   --green: #246B3D;
@@ -774,4 +774,18 @@ input, select {
 .no-detail-image .close {
   top: 16px;
   right: 16px;
+}
+.unit-row strong,
+.unit-option-line strong {
+  color: #2F6FDB;
+}
+
+.unit-link-label {
+  color: #2F6FDB !important;
+}
+
+.unit-row-link:hover,
+.unit-option-link:hover {
+  background: #F3F8FF;
+  border-color: rgba(47, 111, 219, 0.28);
 }
