@@ -419,12 +419,9 @@ function openDetails(id) {
   const contact = [group.contactName, group.contactEmail, group.contactPhone].filter(Boolean).join(" | ") || "Not listed";
 
   els.modalBody.innerHTML = `
-    <div class="modal-card">
-      <div class="modal-hero">
-        ${mediaHtml(group)}
+    <div class="modal-card no-detail-image">
         <button class="close" onclick="closeDetails()">Close</button>
-      </div>
-      <div class="modal-content">
+       <div class="modal-content">
         <p class="eyebrow" class="modal-eyebrow">${escapeHtml(group.category || "Hotel / Residence")}</p>
         <h2 style="margin:0 0 6px;font-size:2rem;letter-spacing:-0.04em;">${escapeHtml(group.name)}</h2>
         <p style="margin:0 0 18px;color:#64748b;">${escapeHtml(group.area || "Area not listed")}${group.address ? ` • ${escapeHtml(group.address)}` : ""}</p>
