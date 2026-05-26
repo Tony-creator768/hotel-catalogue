@@ -1,8 +1,6 @@
-// Paste your Google Apps Script Web App URL below.
-// This package keeps your current URL. If the site does not load live data, redeploy Code.gs and paste the new /exec URL here.
+// Paste your deployed Google Apps Script Web App URL below when you are ready for live Google Sheets data.
+// Leave blank to use the bundled sample-data.js file.
 window.CATALOGUE_CONFIG = {
-  DATA_URL: "https://script.google.com/macros/s/AKfycbyHIX_yzL1Dugjj9oa8gCRPysS5uftJl2I0XbUCEnA0ZEfJhs5uoRWPE8PAkfucztoI/exec",
-  APPROVED_ONLY: true,
-  SHOW_INTERNAL_NOTES: false,
-  CURRENCY: "QAR"
+  DATA_URL: "https://script.google.com/a/macros/georgetown.edu/s/AKfycbwJb8OgmkZg_gOzthKfjbyFP7oYieuqaM9-tGwOHbkKLikI9iPvV_2zTZguLEEtY2AB/exec",
+  APPROVED_ONLY: true
 };
