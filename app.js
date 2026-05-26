@@ -309,11 +309,35 @@ function petLabel(values) {
   return values.join(" / ");
 }
 
+function normalizeSizeText(size) {
+  const raw = String(size || "").trim();
+  if (!raw) return "";
+
+  // If the sheet already says "155 sqm" or "155 to 260 sqm", do not add sqm again.
+  if (/sqm|sq\.?\s*m|m²/i.test(raw)) {
+    return raw.replace(/sq\.?\s*m/ig, "sqm").replace(/m²/ig, "sqm");
+  }
+
+  return `${raw} sqm`;
+}
+
+function extractSizeFromUnitType(row) {
+  const unitType = String(get(row, "Unit Type") || "");
+  const match = unitType.match(/\(?\s*(\d+(?:\.\d+)?\s*(?:sqm|sq\.?\s*m|m²)(?:\s*(?:to|-|–)\s*\d+(?:\.\d+)?\s*(?:sqm|sq\.?\s*m|m²)?)?)\s*\)?/i);
+  if (!match) return "";
+  return match[1].replace(/sq\.?\s*m/ig, "sqm").replace(/m²/ig, "sqm");
+}
+
 function sizeOnlyLabel(row) {
-  const size = String(get(row, "Size SQM") || "").trim();
+  const size = normalizeSizeText(get(row, "Size SQM"));
 
   if (size) {
-    return `${escapeHtml(size)} sqm`;
+    return escapeHtml(size);
+  }
+
+  const extracted = extractSizeFromUnitType(row);
+  if (extracted) {
+    return escapeHtml(extracted);
   }
 
   return "Size not listed";
@@ -766,9 +790,13 @@ function bindEvents() {
     el.addEventListener("change", applyFilters);
   });
 
-  document.querySelector("#printBtn").addEventListener("click", () => window.print());
-  document.querySelector("#exportBtn").addEventListener("click", exportCsv);
-  document.querySelector("#refreshBtn").addEventListener("click", init);
+  const printBtn = document.querySelector("#printBtn");
+  const exportBtn = document.querySelector("#exportBtn");
+  const refreshBtn = document.querySelector("#refreshBtn");
+
+  if (printBtn) printBtn.addEventListener("click", () => window.print());
+  if (exportBtn) exportBtn.addEventListener("click", exportCsv);
+  if (refreshBtn) refreshBtn.addEventListener("click", init);
 
   els.modal.addEventListener("click", event => {
     if (event.target === els.modal) closeDetails();
@@ -780,7 +808,11 @@ async function init() {
 
   const payload = await loadData();
 
-  catalogueRows = normalizeRows(payload.rows || []);
+  if (!payload || payload.ok === false) {
+    console.warn("Catalogue API returned an error:", payload);
+  }
+
+  catalogueRows = normalizeRows((payload && payload.rows) || []);
 
   fillSelect(els.area, uniqueOptions(catalogueRows, "Area"), "All areas");
   fillSelect(els.category, uniqueOptions(catalogueRows, "Category"), "All categories");
